@@ -5,7 +5,7 @@ var readFileSync = function(file) {
     async: false,
     url: file,
     success: function(result) {
-      resolve(result);
+      content=result;
     }
   });
   return content;
