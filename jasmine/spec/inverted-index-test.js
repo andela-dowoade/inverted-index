@@ -27,8 +27,8 @@ describe("Populate index", function() {
   });
 
   it("Index contains right tokens", function() {
-    expect(inverted.getIndex()['alice']).toEqual([0]);
-    expect(inverted.getIndex()['a']).toEqual([0, 1]);
+    expect(inverted.getIndex().alice).toEqual([0]);
+    expect(inverted.getIndex().a).toEqual([0, 1]);
   });
 
 });
