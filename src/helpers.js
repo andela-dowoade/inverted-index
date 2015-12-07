@@ -2,11 +2,11 @@
 var readFileSync = function(file) {
   var content;
   $.ajax({
-    dataType: "json",s
+    dataType: "json",
     async: false,
     url: file,
     success: function(result) {
-      content=result;
+      content = result;
     }
   });
   return content;
@@ -23,4 +23,3 @@ Array.prototype.unique = function() {
 Array.prototype.intersect = function(array) {
   return this.filter((x) => array.indexOf(x) != -1);
 };
-

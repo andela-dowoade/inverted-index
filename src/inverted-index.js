@@ -1,3 +1,4 @@
+"use strict";
 var invertedIndex = function(docpath) {
   var inverted = {};
 
@@ -6,7 +7,7 @@ var invertedIndex = function(docpath) {
   };
 
   var transformDocuments = function(original) {
-    return original.map((itm) => itm.text.toLowerCase().replace(/[^a-zA-Z\s]/g, '').split(' '));
+    return original.map((itm) => itm.text.toLowerCase().replace(/[^a-zA-Z\s]/g, "").split(" "));
   };
 
   var getTokens = function(transformedDocuments) {
