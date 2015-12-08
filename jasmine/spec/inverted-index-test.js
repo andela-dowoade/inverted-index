@@ -1,9 +1,11 @@
-'use strict';
+
 describe('Read book data', function() {
+  "use strict"
   var contents;
+  var inverted = new Index();
 
   beforeEach(function() {
-    contents = readFileSync('books.json');
+    contents = inverted.readFile('books.json');
   });
 
   it('file is not empty', function() {
@@ -14,10 +16,10 @@ describe('Read book data', function() {
 
 
 describe('Populate index', function() {
-  var inverted;
+  var inverted = new Index();
 
   beforeAll(function() {
-    inverted = invertedIndex('books.json');
+    inverted.createIndex('books.json');
   });
 
   it('Index has been created', function() {
@@ -35,10 +37,12 @@ describe('Populate index', function() {
 });
 
 describe('Search index', function() {
-  var inverted;
+  var inverted = new Index();
+
   beforeAll(function() {
-    inverted = invertedIndex('books.json');
+    inverted.createIndex('books.json');
   });
+
 
   it('file is not empty', function() {
     expect(inverted.searchIndex('alice')).toEqual([0]);

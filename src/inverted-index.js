@@ -1,59 +1,76 @@
-"use strict";
-var invertedIndex = function(docpath) {
-  var inverted = {};
+'use strict';
 
-  var getDocuments = function(path) {
-    return readFileSync(path);
-  };
+Array.prototype.unique = function() {
+  var newarr = [];
+  for (var i = 0, l = this.length; i < l; i++)
+    if (newarr.indexOf(this[i]) === -1 && this[i] !== "")
+      newarr.push(this[i]);
+  return newarr;
+};
 
-  var transformDocuments = function(original) {
+Array.prototype.intersect = function(array) {
+  return this.filter((x) => array.indexOf(x) != -1);
+};
+
+var Index = class {
+
+
+  readFile(path) {
+    var content;
+    $.ajax({
+      dataType: "json",
+      async: false,
+      url: path,
+      success: function(result) {
+        content = result;
+      }
+    });
+    return content;
+  }
+
+
+  transformDocuments(original) {
     return original.map((itm) => itm.text.toLowerCase().replace(/[^a-zA-Z\s]/g, "").split(" "));
-  };
+  }
 
-  var getTokens = function(transformedDocuments) {
+
+  getTokens(transformedDocuments) {
     return transformedDocuments.reduce((prev, cur) => prev.concat(cur)).unique();
-  };
+  }
 
-  var createIndex = function(documents) {
+
+  createIndex(documents) {
     var index = {};
-    var transformedDocuments = transformDocuments(getDocuments(documents));
-    var tokens = getTokens(transformedDocuments);
+    var transformedDocuments = this.transformDocuments(this.readFile(documents));
+    var tokens = this.getTokens(transformedDocuments);
     tokens.forEach(function(curToken) {
       index[curToken] = [];
       transformedDocuments.forEach(function(curdoc, docindex) {
         if (curdoc.indexOf(curToken) != -1) index[curToken].push(docindex);
       });
     });
-    return index;
-  };
-  inverted = createIndex(docpath);
+    this.index = index;
+  }
 
 
-  return {
-
-    searchIndex: function() {
-      var result = [];
-      var pos = 0;
-      for (var itm of arguments) {
-        if (Object.keys(inverted).indexOf(itm) == -1) return [];
-        if (pos === 0) {
-          result = result.concat(inverted[itm]);
-          pos = 1;
-        } else {
-          result = result.intersect(inverted[itm]);
-        }
+  searchIndex() {
+    var result = [];
+    var pos = 0;
+    for (var itm of arguments) {
+      if (Object.keys(this.index).indexOf(itm) == -1) return [];
+      if (pos === 0) {
+        result = result.concat(this.index[itm]);
+        pos = 1;
+      } else {
+        result = result.intersect(this.index[itm]);
       }
-      return result;
-    },
-
-    getIndex: function() {
-      return inverted;
     }
-  };
+    return result;
+  }
+
+  getIndex() {
+    return this.index;
+  }
+
 
 };
-
-
-
-
-//console.log(invertedIndex('../jasmine/books.json').searchIndex('an'));
