@@ -44,7 +44,7 @@ describe('Search index', function() {
   });
 
 
-  it('file is not empty', function() {
+  it('Search returns correct results', function() {
     expect(inverted.searchIndex('alice')).toEqual([0]);
     expect(inverted.searchIndex('bob')).toEqual([]);
     expect(inverted.searchIndex('a')).toEqual([0, 1]);
