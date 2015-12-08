@@ -1,6 +1,5 @@
 
 describe('Read book data', function() {
-  "use strict"
   var contents;
   var inverted = new Index();
 
