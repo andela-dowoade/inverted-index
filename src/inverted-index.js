@@ -43,7 +43,7 @@ var Index = class {
         tokens.forEach(function(curToken) {
           index[curToken] = [];
           transformedDocuments.forEach(function(curDocument, documentIndex) {
-            if (curDocument.indexOf(curToken) != -1) {
+            if (curDocument.indexOf(curToken) !== -1) {
               index[curToken].push(documentIndex);
             }
           });
