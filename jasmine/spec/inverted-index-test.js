@@ -1,15 +1,21 @@
-
+'use strict';
 describe('Read book data', function() {
   var contents;
   var inverted = new Index();
 
-  beforeEach(function() {
-    contents = inverted.readFile('books.json');
+  beforeEach(function(done) {
+    inverted.readFile('books.json').done(function(data) {
+      contents = data;
+      done();
+
+    });
   });
 
-  it('file is not empty', function() {
+  it('file is not empty', function(done) {
     expect(contents).toBeTruthy();
     expect(contents).toEqual(jasmine.any(Object));
+    expect(contents.length).toEqual(2);
+    done();
   });
 });
 
@@ -17,15 +23,18 @@ describe('Read book data', function() {
 describe('Populate index', function() {
   var inverted = new Index();
 
-  beforeAll(function() {
-    inverted.createIndex('books.json');
+  beforeAll(function(done) {
+    inverted.createIndex('books.json').then(function() {
+      done();
+    });
   });
 
-  it('Index has been created', function() {
+  it('Index has been created', function(done) {
     expect(inverted.getIndex()).toBeTruthy();
     expect(inverted.getIndex()).toEqual(jasmine.objectContaining({
       'alice': [0]
     }));
+    done();
   });
 
   it('Index contains right tokens', function() {
@@ -38,10 +47,11 @@ describe('Populate index', function() {
 describe('Search index', function() {
   var inverted = new Index();
 
-  beforeAll(function() {
-    inverted.createIndex('books.json');
+  beforeAll(function(done) {
+    inverted.createIndex('books.json').then(function() {
+      done();
+    });
   });
-
 
   it('Search returns correct results', function() {
     expect(inverted.searchIndex('alice')).toEqual([0]);
